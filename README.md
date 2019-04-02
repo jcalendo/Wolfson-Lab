@@ -1,3 +1,3 @@
 # Work Scripts
 
-Sets of scripts used mostly for cleaning and plotting data in R and Python
+Sets of scripts used at work. Mostly for cleaning and plotting data as well as image analysis.
