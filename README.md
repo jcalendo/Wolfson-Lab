@@ -1,3 +1,3 @@
-# parse_imgpro
+# Work Scripts
 
-short script for parsing the text file output from imgpro plus. And a powershell script for creating a GUI.
+Sets of scripts used mostly for cleaning and plotting data in R and Python
