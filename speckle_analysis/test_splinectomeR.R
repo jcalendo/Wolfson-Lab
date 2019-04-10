@@ -82,6 +82,10 @@ left_sliding <- map(trt_combinations, sliding_left)
 # plot the splines --------------------------------------------------------
 
 pval_plot_func = function(df) {
+  # extract groups being compared from df
+  grp_1 <- unlist(unique(df[[3]][4]))[1]
+  grp_2 <- unlist(unique(df[[3]][4]))[2]
+  
   ggplot(df[[1]], aes(TOI, p_value)) +
   geom_point() + 
   geom_line() +
@@ -90,16 +94,22 @@ pval_plot_func = function(df) {
   geom_hline(yintercept = 0.05, color = "red", linetype = 2) +
   ylab("pval") +
   xlab("TOI (min from impact)") + 
+  ggtitle(paste(grp_1, " vs. ", grp_2, " p_values per TOI")) +
   theme_bw()
 }
 
 spline_plot_func = function(df) {
+  # extract groups being compared from df
+  grp_1 <- unlist(unique(df[[3]][4]))[1]
+  grp_2 <- unlist(unique(df[[3]][4]))[2]
+  
   ggplot(df[[3]], aes(x, value, color = category)) +
   geom_smooth(method = 'loess') +
   geom_hline(yintercept = 0, color = "red", linetype = 2) +
   scale_x_continuous(breaks = seq(0, 180, 15)) +
   xlab("TOI (min from impact)") +
   ylab("Percent Change From Baseline") +
+  ggtitle(paste(grp_1, " vs. ", grp_2, " splines")) +
   theme_bw()
 }
 
@@ -113,3 +123,6 @@ left_pval_plts <- map(left_sliding, pval_plot_func)
 # spline plots
 right_spline_plts <- map(right_sliding, spline_plot_func)
 left_spline_plts <- map(left_sliding, spline_plot_func)
+
+
+
