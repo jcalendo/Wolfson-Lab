@@ -10,10 +10,11 @@ df <- read_csv("C:/Users/tuc12093/Dropbox/Casts/Lung Histology/histomorphometry_
 
 # Create summary stats for each treatment-animal-location group
 by_treatment_animal_location <- df %>% 
+  mutate(Treatment = as_factor(Treatment),
+         Location = as_factor(Location)) %>% 
   group_by(Treatment, Animal_id, Location) %>% 
   summarize_if(is.numeric, 
                list(~mean(., na.rm = TRUE), ~sd(., na.rm = TRUE)))
-
 
 # All locations -----------------------------------------------------------
 
@@ -29,12 +30,11 @@ by_location_with_count <- by_treatment_animal_location %>%
   count() %>% 
   left_join(by_location, by = c("Treatment", "Location"))
 
-
 # create plotting function ------------------------------------------------
 
 # general plotting function for by_location
 plot_by_location = function(var_mean, var_sd) {
-  ggplot(by_location, aes(factor(Treatment), {{ var_mean }})) +
+  ggplot(by_location, aes(Treatment, {{ var_mean }})) +
     geom_col() +
     geom_errorbar(aes(ymin = {{ var_mean }} - {{ var_sd }}, 
                       ymax = {{ var_mean }} + {{ var_sd }}), 
@@ -45,4 +45,9 @@ plot_by_location = function(var_mean, var_sd) {
     theme(axis.text.x = element_text(angle = 45, hjust = 1))
 }
 
-plot_by_location(EXP_mean, EXP_sd)
+# plot and significance test ----------------------------------------------
+
+# D2
+plot_by_location(D2_mean, D2_sd)
+summary(d2_res <- aov(D2_mean ~ Treatment, data = by_location))
+TukeyHSD(d2_res, ordered = TRUE)
